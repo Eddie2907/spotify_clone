@@ -1,0 +1,507 @@
+<!--
+// v0 by Vercel.
+// https://v0.dev/t/6uziidjSRjj
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify UI</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        :root {
+            --background: #fff;
+            --foreground: #333;
+            --card: #fff;
+            --card-foreground: #333;
+            --popover: #fff;
+            --popover-foreground: #333;
+            --primary: #1db954;
+            --primary-foreground: #fff;
+            --secondary: #f5f5f5;
+            --secondary-foreground: #333;
+            --muted: #f5f5f5;
+            --muted-foreground: #333;
+            --accent: #f5f5f5;
+            --accent-foreground: #333;
+            --destructive: #e63946;
+            --destructive-foreground: #fff;
+            --border: #e5e7eb;
+            --input: #e5e7eb;
+            --ring: #1db954;
+            --chart-1: #1db954;
+            --chart-2: #1b7d4b;
+            --chart-3: #155e3a;
+            --chart-4: #0d3f2a;
+            --chart-5: #07291c;
+            --radius: 0.5rem;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: var(--primary-foreground);
+            margin-right: 16px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            color: #d1fae5;
+        }
+        .bold {
+            font-size: 24px; /* Increase font size */
+    font-weight: bold;
+    color: var(--primary-foreground);
+    text-decoration: none; /* Remove underline */
+
+        }
+        button {
+            margin-left: 16px;
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .sign-up-btn {
+            background-color: var(--background);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        .sign-up-btn:hover {
+            background-color: #1ed760;
+            color: var(--primary-foreground);
+        }
+        .login-btn {
+            background-color: #fff;
+            color: var(--primary);
+            border: none;
+        }
+        .login-btn:hover {
+            background-color: #f1f1f1;
+        }
+        main {
+            background-color: #121212;
+            color: #fff;
+            padding: 32px 24px;
+        }
+        h2 {
+            color: #f1f1f1;
+            margin-bottom: 16px;
+        }
+        .playlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+        }
+        .playlist-card {
+    background-color: #282828;
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: background-color 0.3s;
+    text-decoration: none; /* Remove underline from the link */
+}
+
+.playlist-card:hover {
+    background-color: #3a3a3a;
+}
+
+.playlist-card h3 {
+    font-size: 16px;
+    margin: 0 0 8px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--primary-foreground); /* Change text color to white */
+}
+
+.playlist-card p {
+    font-size: 14px;
+    color: var(--primary-foreground); /* Change text color to white */
+}
+        .playlist-card img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+        }
+        .playlist-card div {
+            padding: 16px;
+        }
+        
+        .playlist-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #282828;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .playlist-table th, .playlist-table td {
+            padding: 16px;
+            text-align: left;
+        }
+        .playlist-table th {
+            color: #b3b3b3;
+        }
+        .playlist-table tr {
+            border-bottom: 1px solid #3a3a3a;
+            transition: background-color 0.3s;
+        }
+        .playlist-table tr:hover {
+            background-color: #3a3a3a;
+        }
+        .playlist-table svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
+        footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #181818;
+    color: #fff;
+    padding: 16px 24px;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+}
+
+.now-playing {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px; /* Add some space for smaller screens */
+}
+
+.now-playing img {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    margin-right: 16px;
+}
+
+.player-controls {
+    display: flex;
+    justify-content: center; /* Center the controls */
+    align-items: center;
+    flex-grow: 1; /* Allow it to take the remaining space */
+    gap: 16px; /* Space between buttons */
+}
+
+.player-controls button {
+    border: none;
+    background-color: #282828; /* Button background */
+    color: #fff; /* Button text color */
+    padding: 8px 16px; /* Padding for a better look */
+    border-radius: var(--radius); /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+.player-controls button:hover {
+    background-color: #00b324; /* Hover effect */
+}
+
+@media (max-width: 600px) {
+    footer {
+        flex-direction: column; /* Stack footer content vertically on smaller screens */
+        align-items: center;
+    }
+
+    .player-controls {
+        margin-top: 16px; /* Add space between sections */
+    }
+} /* Vertically align items in the center */
+
+.audio-thumbnail {
+    position: relative;
+    width: 80px; /* Reduced size */
+    height: 80px; /* Reduced size */
+    cursor: pointer;
+}
+
+.audio-thumbnail-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+}
+
+.play-pause-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px; /* Reduced icon size */
+    height: 30px; /* Reduced icon size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.play-icon, .pause-icon {
+    width: 100%;
+    height: 100%;
+    fill: #fff; /* Color of the icon */
+}
+
+.song-icon {
+    width: 40px; /* Adjust width as needed */
+    height: 40px; /* Adjust height to maintain aspect ratio */
+    margin-right: 8px; /* Adds space between the icon and the audio player */
+}
+
+.song-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: #fff; /* Adjust color as needed */
+}
+.song-list {
+    width: 100%;
+    margin: 20px 0;
+    padding: 0;
+    list-style: none;
+    background-color: #1f1f1f; /* Dark background for the song list */
+    color: white;              /* Text color */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+
+.currently-playing {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.currently-playing span {
+    font-size: 16px;
+}
+
+.current-song {
+    font-weight: bold;
+}
+.player-controls button:hover {
+    background-color: #00b324;
+}
+
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #181818;
+            color: #fff;
+            padding: 16px 24px;
+        }
+        footer button {
+            border: none;
+            background-color: transparent;
+        }
+        footer svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" class="bold">Spotify</a>
+            <a href="#">Home</a>
+            <a href="#">Search</a>
+            <a href="#">Your Library</a>
+        </nav>
+        <div>
+            <button class="sign-up-btn">Sign Up</button>
+            <button class="login-btn">Log In</button>
+        </div>
+    </header>
+    <main>
+        <section>
+            <h2>Home</h2>
+            <div class="playlist-grid">
+                <a class="playlist-card" href="#">
+                    <img src="images.jpeg" alt="Playlist Cover">
+                    <div>
+                        <h3>Indie Favorites</h3>
+                        <p>soft Music</p>
+                    </div>
+                </a>
+                <a class="playlist-card" href="#">
+                    <img src="download.jpeg" alt="Playlist Cover">
+                    <div>
+                        <h3>Workout Music</h3>
+                        <p>pop Music</p>
+                    </div>
+                </a>
+                <a class="playlist-card" href="#">
+                    <img src="favourite.jpeg" alt="Playlist Cover">
+                    <div>
+                        <h3>Indian Favorites</h3>
+                        <p>Bollywood Music</p>
+                    </div>
+                </a>
+                <a class="playlist-card" href="#">
+                    <img src="retro.jpeg" alt="Playlist Cover">
+                    <div>
+                        <h3>Retro Hits</h3>
+                        <p>vintage Music</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+        <section>
+            <h2>Playlist: Lana Del Rey</h2>
+            <table class="playlist-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Artist</th>
+                        <th>Duration</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="audio-container">
+                                <div class="audio-thumbnail" onclick="togglePlay('audio1', this, 'Lana Del Rey - Summertime Sadness', 'thumbnail summer.jpg')">
+                                    <img src="thumbnail summer.jpg" alt="Summertime Sadness Cover" class="audio-thumbnail-img">
+                                    <div class="play-pause-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="play-icon">
+                                            <polygon points="5 3 19 12 5 21 5 3" fill="#fff"/>
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="pause-icon" style="display: none;">
+                                            <rect x="6" y="4" width="4" height="16" fill="#fff"/>
+                                            <rect x="14" y="4" width="4" height="16" fill="#fff"/>
+                                        </svg> 
+                                    </div>
+                                </div>
+                                <span>Summertime Sadness</span>
+                            </div>
+                        </td>
+                        <td>Lana Del Rey</td>
+                        <td>4:24</td>
+                        <td>
+                            <audio id="audio1" controls>
+                                <source src="Lana-Del-Rey-Summertime-Sadness-(RawPraise.ng).mp3" type="audio/mpeg">
+                            </audio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="audio-container">
+                                <div class="audio-thumbnail" onclick="togglePlay('audio2', this, 'Lana Del Rey - Say Yes to Heaven', 'heaven.jpg')">
+                                    <img src="heaven.jpg" alt="Say Yes to Heaven Cover" class="audio-thumbnail-img">
+                                    <div class="play-pause-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="play-icon">
+                                            <polygon points="5 3 19 12 5 21 5 3" fill="#fff"/>
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="pause-icon" style="display: none;">
+                                            <rect x="6" y="4" width="4" height="16" fill="#fff"/>
+                                            <rect x="14" y="4" width="4" height="16" fill="#fff"/>
+                                        </svg> 
+                                    </div>
+                                </div>
+                                <span>Say Yes to Heaven</span>
+                            </div>
+                        </td>
+                        <td>Lana Del Rey</td>
+                        <td>3:28</td>
+                        <td>
+                            <audio id="audio2" controls>
+                                <source src="Say Yes To Heaven_320(PagalWorld.com.so).mp3" type="audio/mpeg">
+                            </audio>
+                        </td>
+                    </tr>
+                </tbody>
+                <!-- Audio Elements (Add to your existing HTML table rows) -->
+<audio id="audio1" style="display: none;">
+    <source src="Lana-Del-Rey-Summertime-Sadness-(RawPraise.ng).mp3" type="audio/mpeg">
+</audio>
+
+<audio id="audio2" style="display: none;">
+    <source src="Say Yes To Heaven_320(PagalWorld.com.so).mp3" type="audio/mpeg">
+</audio>
+
+            </table>
+        </section>
+    </main>
+    <footer>
+        <div class="now-playing">
+            <img id="now-playing-cover" src="placeholder.svg" alt="Currently Playing Cover">
+            <div>
+                <h4>Currently Playing</h4>
+                <p id="now-playing-title">Paused</p> 
+            </div>
+        </div>
+        <div class="player-controls">
+            <button onclick="prevSong()" aria-label="Previous Song">Prev</button>
+            <button onclick="playPauseSong()" aria-label="Pause/Play Song" id="play-pause-btn">Play</button>
+            <button onclick="nextSong()" aria-label="Next Song">Next</button>
+        </div>
+    </footer>    
+    <script>
+      var currentAudio = null;
+
+function togglePlay(audioId, element, songTitle, coverSrc) {
+    var audio = document.getElementById(audioId);
+    var playIcon = element.querySelector('.play-icon');
+    var pauseIcon = element.querySelector('.pause-icon');
+    var nowPlayingTitle = document.getElementById('now-playing-title');
+    var nowPlayingCover = document.getElementById('now-playing-cover');
+
+    // Stop the currently playing audio if it's different from the selected audio
+    if (currentAudio && currentAudio !== audio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0; // Reset the previous audio to the beginning
+
+        // Reset the previous play/pause icons
+        var prevPlayIcon = currentAudio.closest('.audio-container').querySelector('.play-icon');
+        var prevPauseIcon = currentAudio.closest('.audio-container').querySelector('.pause-icon');
+        prevPlayIcon.style.display = 'block';
+        prevPauseIcon.style.display = 'none';
+    }
+
+    // Play or pause the selected audio
+    if (audio.paused) {
+        audio.play();
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        currentAudio = audio; // Set the current playing audio
+
+        // Update the "Currently Playing" section
+        nowPlayingTitle.textContent = songTitle;
+        nowPlayingCover.src = coverSrc;
+    } else {
+        audio.pause();
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+        currentAudio = null; // Clear the current playing audio
+
+        // Update the "Currently Playing" section
+        nowPlayingTitle.textContent = 'Paused';
+        nowPlayingCover.src = '/placeholder.svg';
+    }
+}
+
+
+</script>
+</body>
+</html>

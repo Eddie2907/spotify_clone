@@ -1,0 +1,37 @@
+.song-list {
+    background-color: red; /* Change to test */
+    color: white;
+    padding: 20px;
+}
+
+.song-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.song-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+
+.song-item span {
+    flex-grow: 1;
+    margin: 0 10px;
+    font-size: 14px;
+}
+
+.song-item:last-child {
+    border-bottom: none;
+}
+
+.player-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 150px;
+}
